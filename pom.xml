@@ -20,10 +20,10 @@
             <version>3.0.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.xerial.snappy</groupId>
-            <artifactId>snappy-java</artifactId>
-            <version>1.1.8.4</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.xerial.snappy</groupId>-->
+<!--            <artifactId>snappy-java</artifactId>-->
+<!--            <version>1.1.8.4</version>-->
+<!--        </dependency>-->
     </dependencies>
 </project>
