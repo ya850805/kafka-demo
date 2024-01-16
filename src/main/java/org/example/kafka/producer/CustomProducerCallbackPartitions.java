@@ -36,7 +36,7 @@ public class CustomProducerCallbackPartitions {
              * 2. 指定key -> 會取得key的hash值，然後使用該hash值對整體的partition數量取餘數，得到一個分區號並發往該分區
              * 3. 沒有指定partition也沒有指定key，會使用黏性分區器，會隨機使用一個分區，並盡可能一直使用該分區，直到該分區batch已滿或達到linger.ms，才會再隨機選擇一個分區(不會與上一個分區相同，如果相同則繼續隨機)
              */
-            kafkaProducer.send(new ProducerRecord<>("first", "hello" + i), new Callback() {
+            kafkaProducer.send(new ProducerRecord<>("first", 0, "", "hello" + i), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
                     if(null == e) {
