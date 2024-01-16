@@ -28,7 +28,10 @@ public class CustomConsumer {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
         //消費者組id
-        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "test");
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG, "test2");
+
+        //設置分區分配策略
+        properties.put(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, "org.apache.kafka.clients.consumer.RoundRobinAssignor");
 
         //1. 創建一個消費者
         KafkaConsumer consumer = new KafkaConsumer<String, String>(properties);
