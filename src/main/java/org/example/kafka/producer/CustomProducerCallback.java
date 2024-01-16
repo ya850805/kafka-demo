@@ -12,7 +12,7 @@ import java.util.Properties;
  **/
 public class CustomProducerCallback {
     //異步方式把消息發送到kafka集群，並指定Callback
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         //0. 配置
         Properties properties = new Properties();
 
@@ -27,7 +27,7 @@ public class CustomProducerCallback {
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<>(properties);
 
         //2. 發送數據並指定Callback
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 500; i++) {
             kafkaProducer.send(new ProducerRecord<>("first", "@@@value@@@" + i), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata recordMetadata, Exception e) {
@@ -36,6 +36,8 @@ public class CustomProducerCallback {
                     }
                 }
             });
+
+            Thread.sleep(1);
         }
 
         //3. 關閉資源
