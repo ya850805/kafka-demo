@@ -6,4 +6,7 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer # key???
       value-serializer: org.apache.kafka.common.serialization.StringSerializer # value???
 
-
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # key????
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer # value????
+      group-id: spring-boot-group # ????id

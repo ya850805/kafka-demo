@@ -19,7 +19,7 @@ public class ProducerController {
     @RequestMapping("/send")
     public String data(String msg) {
         //通過kafka發送出去
-        kafkaTemplate.send("first", msg);
+        kafkaTemplate.send("xxxxx", msg);
         return "ok";
     }
 }
