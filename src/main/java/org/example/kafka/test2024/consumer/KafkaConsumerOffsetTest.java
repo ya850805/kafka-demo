@@ -4,21 +4,21 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author jason
  * @description
  * @create 2024/4/13 02:46
  **/
-public class KafkaConsumerTest {
+public class KafkaConsumerOffsetTest {
     public static void main(String[] args) {
         /**
          * 創建配置對象
@@ -32,14 +32,8 @@ public class KafkaConsumerTest {
         configMap.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         configMap.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
 
-        configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "atguigu");
-
-        /**
-         * 事務隔離級別
-         *      read_uncommitted：默認，都可以讀取的到
-         *      read_committed：要正確提交才能讀取到
-         */
-        configMap.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
+        configMap.put(ConsumerConfig.GROUP_ID_CONFIG, "atguigu2");
+//        configMap.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); //從最早的偏移量開始消費
 
         /**
          * 創建消費者對象
@@ -50,6 +44,23 @@ public class KafkaConsumerTest {
          * 訂閱主題
          */
         consumer.subscribe(Collections.singletonList("test1"));
+
+        /**
+         * 獲取集群信息
+         */
+        boolean flag = true;
+        while(flag) {
+            consumer.poll(Duration.ofMillis(100));
+            Set<TopicPartition> assignment = consumer.assignment(); //獲取當前消費主題的分區信息
+            if(assignment != null && !assignment.isEmpty()) { //有拉取到數據
+                for (TopicPartition topicPartition : assignment) {
+                    if("test1".equals(topicPartition.topic())) {
+                        consumer.seek(topicPartition, 2); //這個分區從偏移量2的地方開始消費
+                        flag = false;
+                    }
+                }
+            }
+        }
 
         /**
          * 從Kafka主題中獲取數據
