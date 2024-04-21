@@ -14,12 +14,12 @@ import java.util.Map;
  * @create 2024/4/13 02:33
  **/
 public class KafkaProducerTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         /**
          * 創建配置對象
          */
         Map<String, Object> configMap = new HashMap<>();
-        configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091");
+        configMap.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
 
         /**
          * 對生產的數據K, V進行序列化的操作
@@ -49,9 +49,10 @@ public class KafkaProducerTest {
 //        producer.send(record);
 
         //多發送幾條
-        for(int i = 0; i < 30; i++) {
-            ProducerRecord<String, String> record = new ProducerRecord<String, String>("test", "key" + i, "value" + i);
+        for(int i = 0; i < 10000; i++) {
+            ProducerRecord<String, String> record = new ProducerRecord<String, String>("test", i % 2, "key" + i, "value" + i);
             producer.send(record);
+            Thread.sleep(1000);
         }
 
         /**
